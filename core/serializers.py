@@ -14,16 +14,16 @@ class DoctorSerializer(serializers.ModelSerializer):
 
 
 class AppointmentSerializer(serializers.ModelSerializer):
-    doctor = DoctorSerializer(read_only=True)  # show doctor details in response
+    doctor = DoctorSerializer(read_only=True)  # return full details
     doctor_id = serializers.PrimaryKeyRelatedField(
         queryset=Doctor.objects.all(), source='doctor', write_only=True
     )
 
     class Meta:
         model = Appointment
-        fields = ['id', 'user', 'patient_name', 'age', 'appointment_date', 'doctor', 'doctor_id']
+        fields = '__all__'
         read_only_fields = ['user']
-
+    
     def validate_appointment_date(self, value):
         from django.utils import timezone
         if value < timezone.now():
